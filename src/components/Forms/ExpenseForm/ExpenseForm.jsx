@@ -50,7 +50,7 @@ export default function ExpenseForm({ setIsOpen, expenseList, setExpenseList, ed
         e.preventDefault()
 
         const updated = expenseList.map(item => {
-            if (item.id == editId) {
+            if (item.id === editId) {
 
                 const priceDifference = item.price - Number(formData.price)
 
