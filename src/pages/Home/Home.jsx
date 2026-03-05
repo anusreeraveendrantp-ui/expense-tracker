@@ -23,7 +23,7 @@ export default function Home() {
     entertainment: 0,
     travel: 0,
   });
-  const [ setCategoryCount] = useState({
+  const [, setCategoryCount] = useState({
     food: 0,
     entertainment: 0,
     travel: 0,
@@ -95,7 +95,7 @@ export default function Home() {
       travel: travelCount,
       entertainment: entertainmentCount,
     });
-  }, [expenseList,isMounted,setCategoryCount]);
+  }, [expenseList,isMounted]);
 
   // saving balance in localStorage
   useEffect(() => {
