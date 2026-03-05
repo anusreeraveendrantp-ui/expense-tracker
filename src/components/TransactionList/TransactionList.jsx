@@ -47,7 +47,7 @@ export default function TransactionList({ transactions, title, editTransactions,
             setCurrentPage(prev => prev - 1)
         }
 
-    }, [totalPages])
+    }, [currentPage, totalPages])
 
     return (
         <div className={styles.transactionsWrapper}>

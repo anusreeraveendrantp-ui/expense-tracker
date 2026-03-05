@@ -78,7 +78,7 @@ export default function ExpenseForm({ setIsOpen, expenseList, setExpenseList, ed
     useEffect(() => {
 
         if (editId) {
-            const expenseData = expenseList.find(item => item.id == editId)
+            const expenseData = expenseList.find(item => item.id === editId)
 
             setFormData({
                 title: expenseData.title,
@@ -89,7 +89,7 @@ export default function ExpenseForm({ setIsOpen, expenseList, setExpenseList, ed
 
         }
 
-    }, [editId])
+    }, [editId,expenseList])
 
     return (
 
@@ -125,9 +125,9 @@ export default function ExpenseForm({ setIsOpen, expenseList, setExpenseList, ed
                     required
                 />
 
-                <Button type="submit" style="primary" shadow>{editId ? 'Edit Expense' : 'Add Expense'}</Button>
+                <Button type="submit"  shadow>{editId ? 'Edit Expense' : 'Add Expense'}</Button>
 
-                <Button style='secondary' shadow
+                <Button  shadow
                     handleClick={() => setIsOpen(false)}
                 >
                     Cancel

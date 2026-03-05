@@ -23,7 +23,7 @@ export default function Home() {
     entertainment: 0,
     travel: 0,
   });
-  const [categoryCount, setCategoryCount] = useState({
+  const [ setCategoryCount] = useState({
     food: 0,
     entertainment: 0,
     travel: 0,
@@ -95,14 +95,14 @@ export default function Home() {
       travel: travelCount,
       entertainment: entertainmentCount,
     });
-  }, [expenseList]);
+  }, [expenseList,isMounted,setCategoryCount]);
 
   // saving balance in localStorage
   useEffect(() => {
     if (isMounted) {
       localStorage.setItem("balance", balance);
     }
-  }, [balance]);
+  }, [balance,isMounted]);
 
   return (
     <div className={styles.container}>
