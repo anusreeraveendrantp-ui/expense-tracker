@@ -19,20 +19,17 @@ app.use(cors({
     // Allow no-origin requests (Postman, curl)
     if (!origin) return callback(null, true);
 
-    const allowed = [
-      'http://localhost:3000',
-      process.env.CLIENT_URL,
-    ].filter(Boolean);
+    // Allow localhost development
+    if (origin.startsWith('http://localhost')) return callback(null, true);
 
-    // Allow any vercel.app deployment of this project
-    const isVercel = /^https:\/\/expense-tracker.*\.vercel\.app$/.test(origin);
+    // Allow all vercel.app deployments
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
 
-    if (isVercel || allowed.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log('CORS blocked origin:', origin);
-      callback(new Error('Not allowed by CORS: ' + origin));
-    }
+    // Allow explicit CLIENT_URL from env
+    if (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) return callback(null, true);
+
+    console.log('CORS blocked origin:', origin);
+    callback(new Error('Not allowed by CORS: ' + origin));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
