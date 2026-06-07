@@ -15,7 +15,18 @@ const PORT = process.env.PORT || 5000;
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (curl, Postman) and any localhost or deployed frontend
+    const allowed = [
+      process.env.CLIENT_URL,
+      'http://localhost:3000',
+    ].filter(Boolean);
+    if (!origin || allowed.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -42,4 +53,3 @@ async function start() {
 }
 
 start();
-console.log("MONGO_URI:", process.env.MONGO_URI);
