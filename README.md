@@ -9,7 +9,7 @@ A full-stack web application to record, manage, and analyse personal expenses. B
 | Service | URL |
 |---|---|
 | Frontend | https://expense-tracker-assesment.vercel.app |
-| Backend API | https://expense-tracker-1-qlur.onrender.com/api/health |
+| Backend API | (https://expense-tracker-1-qlur.onrender.com) |
 
 ---
 
