@@ -2,90 +2,85 @@ import TransactionCard from '../TransactionCard/TransactionCard'
 import styles from './TransactionList.module.css'
 import Modal from '../Modal/Modal'
 import ExpenseForm from '../Forms/ExpenseForm/ExpenseForm'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Pagination from '../Pagination/Pagination'
 
-export default function TransactionList({ transactions, title, editTransactions, balance, setBalance }) {
+export default function TransactionList({
+  transactions,
+  title,
+  loading,
+  balance,
+  currentPage,
+  totalPages,
+  setCurrentPage,
+  onDelete,
+  onEdit,
+}) {
+  const [editId, setEditId] = useState(null)
+  const [isDisplayEditor, setIsDisplayEditor] = useState(false)
 
-    const [editId, setEditId] = useState(0)
-    const [isDisplayEditor, setIsDisplayEditor] = useState(false)
-    const [currentTransactions, setCurrentTransactions] = useState([])
-    const [currentPage, setCurrentPage] = useState(1)
-    const maxRecords = 3;
-    const [totalPages, setTotalPages] = useState(0)
-
-    const handleDelete = (id) => {
-
-        const item = transactions.find(i => i.id === id)
-        const price = Number(item.price)
-        setBalance(prev => prev + price)
-
-        editTransactions(prev => (
-            prev.filter(item => item.id !== id)
-        ))
+  const handleDelete = (id) => {
+    if (window.confirm('Delete this expense?')) {
+      onDelete(id)
     }
+  }
 
-    const handleEdit = (id) => {
-        setEditId(id)
-        setIsDisplayEditor(true)
-    }
+  const handleEdit = (id) => {
+    setEditId(id)
+    setIsDisplayEditor(true)
+  }
 
-    useEffect(() => {
+  const handleEditClose = () => {
+    setIsDisplayEditor(false)
+    setEditId(null)
+  }
 
-        const startIndex = (currentPage - 1) * maxRecords
-        const endIndex = Math.min(currentPage * maxRecords, transactions.length)
+  return (
+    <div className={styles.transactionsWrapper}>
+      {title && <h2>{title}</h2>}
 
-        setCurrentTransactions([...transactions].slice(startIndex, endIndex))
-        setTotalPages(Math.ceil(transactions.length / maxRecords))
-
-    }, [currentPage, transactions])
-
-    // update page if all items on current page have been deleted
-    useEffect(() => {
-
-        if(totalPages < currentPage && currentPage > 1){
-            setCurrentPage(prev => prev - 1)
-        }
-
-    }, [currentPage, totalPages])
-
-    return (
-        <div className={styles.transactionsWrapper}>
-
-            {title && <h2>{title}</h2>}
-
-            {transactions.length > 0 ?
-                <div className={styles.list}>
-                    <div>
-                        {currentTransactions.map(transaction => (
-                            <TransactionCard
-                                details={transaction}
-                                key={transaction.id}
-                                handleDelete={() => handleDelete(transaction.id)}
-                                handleEdit={() => handleEdit(transaction.id)}
-                            />
-                        ))}
-                    </div>
-                    {totalPages > 1 && (<Pagination updatePage={setCurrentPage} currentPage={currentPage} totalPages={totalPages} />)}
-                </div>
-                : (
-                    <div className={styles.emptyTransactionsWrapper}>
-                        <p>No transactions!</p>
-                    </div>
-                )
-            }
-
-
-            <Modal isOpen={isDisplayEditor} setIsOpen={setIsDisplayEditor}>
-                <ExpenseForm
-                    editId={editId}
-                    expenseList={transactions}
-                    setExpenseList={editTransactions}
-                    setIsOpen={setIsDisplayEditor}
-                    balance={balance}
-                    setBalance={setBalance}
-                />
-            </Modal>
+      {loading ? (
+        <div className={styles.emptyTransactionsWrapper}>
+          <p>Loading…</p>
         </div>
-    )
+      ) : transactions.length > 0 ? (
+        <div className={styles.list}>
+          <div>
+            {transactions.map(transaction => (
+              <TransactionCard
+                details={transaction}
+                key={transaction._id}
+                handleDelete={() => handleDelete(transaction._id)}
+                handleEdit={() => handleEdit(transaction._id)}
+              />
+            ))}
+          </div>
+          {totalPages > 1 && (
+            <Pagination
+              updatePage={setCurrentPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          )}
+        </div>
+      ) : (
+        <div className={styles.emptyTransactionsWrapper}>
+          <p>No transactions!</p>
+        </div>
+      )}
+
+      <Modal isOpen={isDisplayEditor} setIsOpen={handleEditClose}>
+        <ExpenseForm
+          editId={editId}
+          expenseList={transactions}
+          setIsOpen={handleEditClose}
+          balance={balance}
+          onSubmit={async (id, formData, oldAmount) => {
+            await onEdit(id, formData, oldAmount)
+            handleEditClose()
+          }}
+        />
+      </Modal>
+    </div>
+  )
 }
