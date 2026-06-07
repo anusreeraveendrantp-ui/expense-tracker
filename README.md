@@ -1,70 +1,288 @@
-# Getting Started with Create React App
+# 💸 Expense Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack web application to record, manage, and analyse personal expenses. Built with React.js on the frontend and Node.js/Express on the backend, backed by MongoDB Atlas.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🌐 Live Demo
 
-### `npm start`
+| Service | URL |
+|---|---|
+| Frontend | https://expense-tracker-assesment.vercel.app |
+| Backend API | https://expense-tracker-1-qlur.onrender.com/api/health |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ✨ Features
 
-### `npm test`
+### Core
+- **User Authentication** — Register and login with JWT-based auth
+- **Add Expense** — Title, amount, category, payment method, notes, date
+- **Edit Expense** — Update any field inline from the dashboard
+- **Delete Expense** — Confirmation prompt before removal
+- **Wallet Balance** — Persisted in DB, updates automatically on add/edit/delete
+- **Expense History** — Paginated table with all your expenses
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Search & Filter
+- **Search** by title or category (debounced, 350ms)
+- **Filter** by category dropdown
+- **Clear filters** in one click
+- **Pagination** — 5 records per page with prev/next navigation
 
-### `npm run build`
+### Dashboard
+- **Total Expenses** — All-time sum
+- **Monthly Expenses** — Current month spending
+- **Recent Transactions** — Last 5 expenses at a glance
+- **Category Pie Chart** — Spending breakdown by category (Recharts)
+- **Monthly Trend Line Chart** — Last 6 months spending trend (Recharts)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠 Tech Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Frontend
+| Tool | Purpose |
+|---|---|
+| React.js | UI framework |
+| React Router v6 | Client-side routing |
+| Axios | HTTP client |
+| Recharts | Charts (Pie + Line) |
+| Notistack | Toast notifications |
+| CSS Modules | Component-scoped styling |
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Backend
+| Tool | Purpose |
+|---|---|
+| Node.js + Express | REST API server |
+| MongoDB Atlas | Cloud database |
+| Mongoose | ODM for MongoDB |
+| JWT (jsonwebtoken) | Authentication tokens |
+| bcrypt | Password hashing |
+| dotenv | Environment variables |
 
 ### Deployment
+| Service | Platform |
+|---|---|
+| Frontend | Vercel |
+| Backend | Render |
+| Database | MongoDB Atlas |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## 📁 Folder Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+expense-tracker/
+├── public/
+├── src/
+│   ├── api/
+│   │   └── expenseApi.js        # Axios instance + all API calls
+│   ├── components/
+│   │   ├── AuthGuard/           # Protects private routes
+│   │   ├── BarChart/
+│   │   ├── Button/
+│   │   ├── Card/
+│   │   ├── Forms/
+│   │   │   ├── AddBalanceForm/
+│   │   │   └── ExpenseForm/
+│   │   ├── Modal/
+│   │   ├── Pagination/
+│   │   ├── PieChart/
+│   │   ├── TransactionCard/
+│   │   └── TransactionList/
+│   ├── context/
+│   │   └── AuthContext.js       # Auth state (login/register/logout)
+│   ├── pages/
+│   │   ├── Home/                # Main dashboard
+│   │   ├── Login/
+│   │   └── Register/
+│   ├── App.js
+│   └── index.js
+│
+└── server/
+    ├── config/
+    │   └── db.js                # MongoDB connection
+    ├── controllers/
+    │   ├── authController.js
+    │   ├── dashboardController.js
+    │   ├── expenseController.js
+    │   └── userController.js
+    ├── middleware/
+    │   ├── authenticate.js      # JWT verification
+    │   └── errorHandler.js
+    ├── models/
+    │   ├── Expense.js
+    │   └── User.js
+    ├── routes/
+    │   ├── auth.js
+    │   ├── dashboard.js
+    │   ├── expenses.js
+    │   └── user.js
+    ├── validations/
+    │   └── expenseValidation.js
+    └── index.js
+```
+
+---
+
+## 🔌 API Endpoints
+
+### Authentication
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login, receive JWT |
+| POST | `/api/auth/logout` | Logout |
+
+### Expenses
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/expenses` | List expenses (paginated, searchable, filterable) |
+| POST | `/api/expenses` | Create expense |
+| GET | `/api/expenses/:id` | Get single expense |
+| PUT | `/api/expenses/:id` | Update expense |
+| DELETE | `/api/expenses/:id` | Delete expense |
+
+#### Query Parameters for `GET /api/expenses`
+| Param | Type | Description |
+|---|---|---|
+| `page` | number | Page number (default: 1) |
+| `limit` | number | Records per page (default: 10) |
+| `q` | string | Search by title or category |
+| `category` | string | Filter by category |
+| `sort` | string | `date_desc`, `date_asc`, `amount_desc`, `amount_asc` |
+
+### Dashboard
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/dashboard` | Total, monthly, recent, category breakdown, monthly trend |
+
+### User / Wallet
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/user/balance` | Get wallet balance |
+| PUT | `/api/user/balance` | Update wallet balance |
+
+---
+
+## 🗃 MongoDB Schemas
+
+### User
+```js
+{
+  name: String,           // required
+  email: String,          // required, unique
+  password: String,       // bcrypt hashed
+  walletBalance: Number,  // default 0
+  timestamps: true
+}
+```
+
+### Expense
+```js
+{
+  userId: ObjectId,       // ref: User
+  title: String,          // required, max 255 chars
+  amount: Number,         // required, > 0
+  category: String,       // Food | Travel | Entertainment | Bills | Shopping | Health | Education | Other
+  paymentMethod: String,  // Cash | Credit Card | Debit Card | UPI | Net Banking | Other
+  notes: String,          // optional
+  expenseDate: Date,      // required
+  timestamps: true
+}
+```
+
+---
+
+## ⚙️ Setup — Run Locally
+
+### Prerequisites
+- Node.js v18+
+- MongoDB Atlas account (or local MongoDB)
+
+### 1. Clone the repo
+```bash
+git clone (https://github.com/anusreeraveendrantp-ui/expense-tracker)
+cd expense-tracker
+```
+
+### 2. Install frontend dependencies
+```bash
+npm install
+```
+
+### 3. Install backend dependencies
+```bash
+cd server
+npm install
+```
+
+### 4. Configure environment variables
+
+Create `server/.env`:
+```env
+PORT=8000
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/expense_tracker
+JWT_SECRET=your_super_secret_key
+JWT_EXPIRES_IN=7d
+CLIENT_URL=http://localhost:3000
+```
+
+### 5. Start backend
+```bash
+cd server
+node index.js
+```
+
+### 6. Start frontend (new terminal)
+```bash
+cd ..
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🚀 Deployment
+
+### Backend → Render
+| Setting | Value |
+|---|---|
+| Root Directory | `server` |
+| Build Command | `npm install` |
+| Start Command | `node index.js` |
+
+Environment variables to set in Render dashboard:
+```
+MONGO_URI      = <your Atlas URI>
+JWT_SECRET     = <your secret>
+JWT_EXPIRES_IN = 7d
+CLIENT_URL     = <your Vercel frontend URL>
+PORT           = 8000
+```
+
+### Frontend → Vercel
+| Setting | Value |
+|---|---|
+| Framework | Create React App |
+| Root Directory | `.` (project root) |
+
+Environment variable to set in Vercel dashboard:
+```
+REACT_APP_API_URL = https://your-backend.onrender.com/api
+```
+
+---
+
+## 🔐 Security Notes
+- Passwords are hashed with **bcrypt** (10 salt rounds) — never stored as plain text
+- JWT tokens expire after 7 days
+- All expense endpoints are protected — users can only access their own data
+- `.env` files are excluded from Git via `.gitignore`
+
+---
+
+## 👩‍💻 Author
+
+**Anusree Raveendran**
