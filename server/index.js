@@ -16,19 +16,26 @@ const PORT = process.env.PORT || 5000;
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (curl, Postman) and any localhost or deployed frontend
     const allowed = [
-      process.env.CLIENT_URL,
+      'https://expense-tracker-asses.vercel.app',
       'http://localhost:3000',
+      process.env.CLIENT_URL,
     ].filter(Boolean);
+
+    // Allow requests with no origin (Postman, curl, server-to-server)
     if (!origin || allowed.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS: ' + origin));
     }
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Handle preflight for all routes
+app.options('*', cors());
 app.use(express.json());
 app.use(cookieParser());
 
